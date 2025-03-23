@@ -1,13 +1,47 @@
 from fastapi import FastAPI
-from google import genai
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from dotenv import load_dotenv
+from google import genai
+from pathlib import Path
+import os
 
-client = genai.Client(api_key="AIzaSyCZdBCN6wecR-MjeUFg-0nlUxPOAnCTEPA")
+load_dotenv()
+api_key = os.getenv("GEMINI_API_SECRET_KEY")
+client = genai.Client(api_key=api_key)
 
 class PromptRequest(BaseModel):
     text: str
 
 app = FastAPI()
+
+# CORS middleware setup
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins (you can specify a list of allowed domains)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
+
+# Serve static files
+app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
+
+# routes
+@app.get("/")
+def root():
+    return {
+        "message":"Hello World",
+        "docs": "http://localhost:8000/docs",
+        "home": "http://localhost:8000/home"
+    }
+
+# Root endpoint serving index.html
+@app.get("/home")
+def read_index():
+    return FileResponse("static/index.html")
 
 def processPrompt(content: str):
     content="Not using markdown for response just plain text. " + content
@@ -16,9 +50,12 @@ def processPrompt(content: str):
     )
     return response.text
 
-@app.get("/")
-def hello():
-    return "Hello World";
+@app.post("/api/gemini/generate-essay")
+async def genEssay():
+    content = f"Generate an essay with a random topic for who is preparing for IELTS, TOEIC, or TOEFL writing skills and is being an intermediate level. Add the topic upon the generated essay."
+    result = processPrompt(content)
+    return {"response": result}
+
 
 @app.post("/api/gemini")
 async def promptAI(prompt: PromptRequest):

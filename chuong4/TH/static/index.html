@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini AI API</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f7fc;
+      }
+      h1 {
+        text-align: center;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      .form-group button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .form-group button:hover {
+        background-color: #45a049;
+      }
+      .result {
+        margin-top: 20px;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .result pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      #responseText {
+        font-size: 17px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gemini AI API</h1>
+
+    <div class="container">
+      <!-- Generate Essay Form -->
+      <div class="form-group">
+        <button id="generateEssayBtn">Generate Essay</button>
+      </div>
+
+      <!-- Grammar Check Form -->
+      <div class="form-group">
+        <label for="grammarText">Enter Text for Grammar Check:</label>
+        <textarea
+          id="grammarText"
+          rows="4"
+          placeholder="Enter text..."
+        ></textarea>
+        <button id="checkGrammarBtn">Check Grammar</button>
+      </div>
+
+      <!-- Score Text Form -->
+      <div class="form-group">
+        <label for="scoreText">Enter Text for Scoring:</label>
+        <textarea
+          id="scoreText"
+          rows="4"
+          placeholder="Enter text..."
+        ></textarea>
+        <button id="scoreTextBtn">Score Text</button>
+      </div>
+
+      <!-- Results -->
+      <div class="result" id="resultContainer" style="display: none">
+        <h3>Response:</h3>
+        <pre id="responseText"></pre>
+      </div>
+    </div>
+
+    <script>
+      const generateEssayBtn = document.getElementById("generateEssayBtn");
+      const checkGrammarBtn = document.getElementById("checkGrammarBtn");
+      const scoreTextBtn = document.getElementById("scoreTextBtn");
+
+      const grammarText = document.getElementById("grammarText");
+      const scoreText = document.getElementById("scoreText");
+
+      const resultContainer = document.getElementById("resultContainer");
+      const responseText = document.getElementById("responseText");
+
+      const API_URL = "http://127.0.0.1:8000"; // Replace with your FastAPI server URL
+
+      // Function to display result
+      function displayResult(result) {
+        resultContainer.style.display = "block";
+        responseText.textContent = result;
+      }
+
+      // Generate Essay Request
+      generateEssayBtn.addEventListener("click", async () => {
+        try {
+          const response = await fetch(`${API_URL}/api/gemini/generate-essay`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+          displayResult(data.response);
+        } catch (error) {
+          displayResult("Error: " + error.message);
+        }
+      });
+
+      // Check Grammar Request
+      checkGrammarBtn.addEventListener("click", async () => {
+        const text = grammarText.value;
+        if (!text) {
+          alert("Please enter text for grammar check.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_URL}/api/gemini`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text: text }),
+          });
+          const data = await response.json();
+          displayResult(data.response);
+        } catch (error) {
+          displayResult("Error: " + error.message);
+        }
+      });
+
+      // Score Text Request
+      scoreTextBtn.addEventListener("click", async () => {
+        const text = scoreText.value;
+        if (!text) {
+          alert("Please enter text for scoring.");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_URL}/api/gemini/score-text`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text: text }),
+          });
+          const data = await response.json();
+          displayResult(data.response);
+        } catch (error) {
+          displayResult("Error: " + error.message);
+        }
+      });
+    </script>
+  </body>
+</html>
