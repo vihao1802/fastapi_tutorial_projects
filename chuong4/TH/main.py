@@ -38,7 +38,7 @@ def root():
         "home": "http://localhost:8000/home"
     }
 
-# Root endpoint serving index.html
+# Endpoint serving index.html
 @app.get("/home")
 def read_index():
     return FileResponse("static/index.html")
