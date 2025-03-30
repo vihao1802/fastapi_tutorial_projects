@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from configs.database import get_session
 from models.cart import Cart, CartCreate, CartResponse
-from models.order import Order, OrderResponse
+from models.order import Order
 from models.item import Item, ItemResponse
 from models.order_detail import OrderDetail, OrderDetailCreate
-from utils.zalo_pay import handle_zalopay_payment
+from services.zalo_pay import handle_zalopay_payment
 from sqlmodel import  Session, select, delete
 
 router = APIRouter(
@@ -110,7 +110,7 @@ async def checkout_cart(session: Session = Depends(get_session)):
             session.add(order_detail)
         
         # Bước 3: Kết nối với API ZaloPay
-        result = await handle_zalopay_payment(new_order)
+        result = await handle_zalopay_payment(new_order, session)
 
         # Bước 4: Xóa cart
         session.exec(delete(Cart))

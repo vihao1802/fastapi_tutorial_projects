@@ -7,9 +7,9 @@ from pydantic import BaseModel
 
 class Order(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    # default is pending
     status: str = Field(default="pending")
     total_amount: int = Field()
+    app_trans_id: str = Field(default="")
     created_at: datetime = Field(default_factory=datetime.now)
 
 class OrderResponse(SQLModel):
