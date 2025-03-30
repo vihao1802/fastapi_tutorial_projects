@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from configs.database import get_session
 from models.item import Item, ItemCreate
-from models.cart import Cart
 from sqlmodel import  Session, select
 
 router = APIRouter(
@@ -26,7 +25,7 @@ async def get_all_items(session: Session = Depends(get_session)):
     items = session.exec(select(Item)).all()
     return items
 
-@router.delete("/{item_id}", response_model=list[Item])
+""" @router.delete("/{item_id}", response_model=list[Item])
 async def remove_item(item_id: int, session: Session = Depends(get_session)):
     cart_item = session.exec(select(Cart).where(Cart.item_id == item_id)).one()
 
@@ -39,4 +38,4 @@ async def remove_item(item_id: int, session: Session = Depends(get_session)):
         session.commit()
         return session.exec(select(Item)).all()
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) """
