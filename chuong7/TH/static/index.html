@@ -42,7 +42,7 @@
       }
       .item-info {
         flex-grow: 1;
-        text-align: left;
+        text-align: center;
       }
       .actions {
         display: flex;
@@ -123,17 +123,6 @@
   <body>
     <h1>Shopping Cart</h1>
     <div class="container">
-      <!-- Product List -->
-      <div class="column">
-        <h2>Products</h2>
-        <div class="input-container">
-          <input type="text" id="new-product-name" placeholder="Product Name" />
-          <input type="number" id="new-product-price" placeholder="Price" />
-          <button class="add-btn" onclick="addNewProduct()">Add Product</button>
-        </div>
-        <ul id="product-list"></ul>
-      </div>
-
       <!-- Cart -->
       <div class="column">
         <h2>Cart</h2>
@@ -142,34 +131,17 @@
           Pay with ZaloPay
         </button>
       </div>
-    </div>
 
-    <div class="container">
-      <!-- Order List -->
+      <!-- Product List -->
       <div class="column" style="margin-top: 20px; width: 80%">
         <h2>Orders</h2>
         <ul id="order-list"></ul>
       </div>
     </div>
-
     <script>
       async function fetchData(url) {
         const response = await fetch(url);
         return response.json();
-      }
-
-      async function loadProducts() {
-        const products = await fetchData("/item");
-        const productList = document.getElementById("product-list");
-        productList.innerHTML = "";
-        products.forEach((product) => {
-          const li = document.createElement("li");
-          li.innerHTML = `<span class='item-info'>${product.name} - $${product.price}</span>
-                    <span class='actions'>
-                        <button class="add-btn" onclick="addToCart(${product.id})">Add to Cart</button>
-                    </span>`;
-          productList.appendChild(li);
-        });
       }
 
       async function loadCart() {
@@ -180,12 +152,7 @@
           const li = document.createElement("li");
           li.innerHTML = `<span class='item-info'>${item.item.name} - ${
             item.item.price
-          }$ (x${item.quantity}) - $${item.item.price * item.quantity}</span>
-                          <span class='actions'>
-                              <button class="remove-btn" onclick="removeFromCart(${
-                                item.item.id
-                              })">Remove</button>
-                          </span>`;
+          }$ (x${item.quantity}) - $${item.item.price * item.quantity}</span>`;
           cartList.appendChild(li);
         });
       }
@@ -237,52 +204,6 @@
         }
       }
 
-      async function addNewProduct() {
-        const name = document.getElementById("new-product-name").value;
-        const price = document.getElementById("new-product-price").value;
-        if (!name || !price) return alert("Please fill in all fields");
-        const res = await fetch("/item", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, price: parseInt(price) }),
-        });
-
-        if (res.status === 201) {
-          document.getElementById("new-product-name").value = "";
-          document.getElementById("new-product-price").value = "";
-        }
-
-        loadProducts();
-      }
-
-      async function addToCart(itemId) {
-        await fetch("/cart", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ item_id: itemId, quantity: 1 }),
-        });
-        loadCart();
-      }
-
-      async function deleteProduct(itemId) {
-        const res = await fetch(`/item/${itemId}`, { method: "DELETE" });
-        if (res.status === 200) {
-          loadProducts();
-        } else if (res.status === 400) {
-          alert("Item is in cart, please remove it from cart first");
-        }
-      }
-
-      async function removeFromCart(itemId) {
-        await fetch(`/cart/${itemId}`, {
-          method: "DELETE",
-        })
-          .then((res) => res.json())
-          .then((data) => console.log(data));
-        loadCart();
-      }
-
-      loadProducts();
       loadCart();
       loadOrders();
     </script>
