@@ -6,7 +6,6 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from configs.database import  create_db_and_tables
 from routers.cart import router as cart_router
-from routers.item import router as item_router
 from routers.order import router as order_router
 
 # asynccontextmanager can define logic (code) that should be executed once, before the application starts receiving requests.
@@ -30,7 +29,6 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), name="static")
 
 app.include_router(cart_router)
-app.include_router(item_router)
 app.include_router(order_router)
 
 @app.get("/")
