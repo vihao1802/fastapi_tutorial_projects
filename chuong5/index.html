@@ -1,5 +1,6 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +36,7 @@
             let gallery = document.getElementById("gallery");
             gallery.innerHTML = "";  // Xóa ảnh cũ
             console.log(images);
-            
+
             images.forEach(img => {
                 let div = document.createElement("div");
                 div.classList.add("image-container");
@@ -69,13 +70,38 @@
         }
     </script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .image-container { display: inline-block; margin: 10px; text-align: center; }
-        .image { width: 200px; height: auto; display: block; }
-        .delete-btn { background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: 5px; }
-        .delete-btn:hover { background: darkred; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .image-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .image {
+            width: 200px;
+            height: auto;
+            display: block;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .delete-btn:hover {
+            background: darkred;
+        }
     </style>
 </head>
+
 <body>
     <h1>Upload & Hiển thị Ảnh</h1>
     <form id="uploadForm">
@@ -85,4 +111,5 @@
     <h2>Gallery</h2>
     <div id="gallery"></div>
 </body>
+
 </html>
