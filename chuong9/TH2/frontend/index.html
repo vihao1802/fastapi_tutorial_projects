@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    img {
+      margin-top: 20px;
+      display: none;
+      max-width: 100%;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>QR Code Generator</h1>
+  <form id="qr-form">
+    <input type="text" id="url" placeholder="Nhập URL (https://...)" required />
+    <button type="submit">Tạo mã QR</button>
+  </form>
+
+  <div class="error" id="error-msg"></div>
+  <img id="qr-image" alt="QR Code" />
+
+  <script>
+    const form = document.getElementById("qr-form");
+    const qrImage = document.getElementById("qr-image");
+    const errorMsg = document.getElementById("error-msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const url = document.getElementById("url").value.trim();
+
+      if (!url.startsWith("http")) {
+        errorMsg.textContent = "Vui lòng nhập URL hợp lệ (bắt đầu bằng http/https)";
+        qrImage.style.display = "none";
+        return;
+      }
+
+      errorMsg.textContent = ""; // clear lỗi cũ
+      qrImage.style.display = "none";
+
+      try {
+        const response = await fetch("http://localhost:8000/generate_qr", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          errorMsg.textContent = data.error || "Lỗi không xác định";
+          return;
+        }
+
+        const blob = await response.blob();
+        qrImage.src = URL.createObjectURL(blob);
+        qrImage.style.display = "block";
+      } catch (err) {
+        errorMsg.textContent = "Bạn đã spam quá nhiều.";
+      }
+    });
+  </script>
+</body>
+</html>
