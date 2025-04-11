@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Payment Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+      }
+      .container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      .section {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+      .order-info {
+        background: #e3f2fd;
+      }
+      .order-items {
+        background: #fff3cd;
+      }
+      .section p {
+        margin: 5px 0;
+      }
+      .item-list {
+        list-style: none;
+        padding: 0;
+      }
+      .item-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        background: #007bff;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 15px;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Order Payment Details</h2>
+
+      <div class="section order-info">
+        <h3>Order Information</h3>
+        <p><strong>Order ID:</strong> <span id="order-id"></span></p>
+        <p><strong>Status:</strong> <span id="order-status"></span></p>
+        <p><strong>Total Amount:</strong> $<span id="order-total"></span></p>
+        <p><strong>Created At:</strong> <span id="order-created"></span></p>
+      </div>
+
+      <div class="section order-items">
+        <h3>Order Items</h3>
+        <ul class="item-list" id="order-items"></ul>
+      </div>
+
+      <a href="/home" class="btn">Back to Home</a>
+    </div>
+
+    <script>
+      function getOrderIdFromUrl() {
+        const pathSegments = window.location.pathname.split("/");
+        return pathSegments[pathSegments.length - 1];
+      }
+
+      function getQueryStringParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      async function loadPaymentDetails() {
+        const orderId = getOrderIdFromUrl();
+
+        const response = await fetch(`/order/${orderId}`);
+        const data = await response.json();
+
+        console.log({ data });
+
+        document.getElementById("order-id").textContent = data.id;
+        document.getElementById("order-status").textContent = data.status;
+        document.getElementById("order-total").textContent = data.total_amount;
+        document.getElementById("order-created").textContent = new Date(
+          data.created_at
+        ).toLocaleString();
+
+        const orderItemsContainer = document.getElementById("order-items");
+        data.order_details.forEach((item) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<span>Item ID: ${item.item.id} - ${item.item.name} - ${item.item.price} - Qty: ${item.quantity}</span>`;
+          orderItemsContainer.appendChild(li);
+        });
+      }
+
+      async function checkOrderStatus() {
+        const orderId = getOrderIdFromUrl();
+        // const appTransId = getQueryStringParameter('apptransid');
+        
+        //("{order_id}/zalopay-status/{app_trans_id}")
+        const response = await fetch(`/order/${orderId}/zalopay-status`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching order status:", error);
+        })
+        .finally(() => {
+          loadPaymentDetails();
+        });
+      }
+
+      checkOrderStatus();
+
+    </script>
+  </body>
+</html>
