@@ -41,7 +41,12 @@ def create_post(
         image_path = f"/{file_location}"  # Lưu đường dẫn
 
     post_data = Post(
-        title=title, content=content, image=image_path, author_id=int(author_id)
+        title=title,
+        content=content,
+        image=image_path,
+        author_id=int(author_id),
+        created_at=datetime.datetime.now(),
+        updated_at=datetime.datetime.now(),
     )
 
     session.add(post_data)
