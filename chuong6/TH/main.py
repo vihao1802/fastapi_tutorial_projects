@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import create_db_and_tables
 from contextlib import asynccontextmanager
 from routers import posts, users
+from fastapi.staticfiles import StaticFiles
 
 
 @asynccontextmanager
@@ -24,6 +25,9 @@ app.add_middleware(
 
 app.include_router(posts.router)
 app.include_router(users.router)
+
+app.mount("/tmp", StaticFiles(directory="/tmp"), name="tmp")
+
 
 if __name__ == "__main__":
     import uvicorn
