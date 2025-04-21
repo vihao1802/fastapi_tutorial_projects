@@ -173,6 +173,8 @@
     </div>
 
     <script>
+      const BASE_URL = "https://fastapi-blog-demo.onrender.com"; // Địa chỉ API của bạn
+      // const BASE_URL = "http://localhost:8000"; // Địa chỉ API của bạn
       function formatDate(date) {
         const options = {
           year: "numeric",
@@ -210,7 +212,7 @@
       }
 
       function fetchBlogs() {
-        fetch("http://localhost:8000/posts")
+        fetch(`${BASE_URL}/posts`)
           .then((response) => response.json())
           .then((posts) => {
             let html = "";
@@ -218,7 +220,7 @@
               html += `
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="${
+                                <img src="${BASE_URL}${
                                   post.image || "placeholder.jpg"
                                 }" class="card-img-top" alt="${post.title}">
                                 <div class="card-body">
@@ -243,7 +245,7 @@
         const content = document.getElementById("search-content").value;
         const createdAt = document.getElementById("search-date").value;
 
-        let url = `http://localhost:8000/posts/user/${userId}?`;
+        let url = `${BASE_URL}/posts/user/${userId}?`;
         if (title) url += `title=${encodeURIComponent(title)}&`;
         if (content) url += `content=${encodeURIComponent(content)}&`;
         if (createdAt) url += `created_at=${createdAt}&`;
@@ -257,7 +259,7 @@
                           <tr>
                               <td>${index + 1}</td>
                               <td>${post.title}</td>
-                              <td><img src="${
+                              <td><img src="${BASE_URL}${
                                 post.image || "placeholder.jpg"
                               }" alt="${
                 post.title
@@ -301,7 +303,7 @@
       }
 
       function editBlog(id) {
-        fetch(`http://localhost:8000/posts/${id}`)
+        fetch(`${BASE_URL}/posts/${id}`)
           .then((response) => response.json())
           .then((post) => {
             document.getElementById("blog-id").value = post.id;
@@ -329,7 +331,7 @@
         if (!confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) {
           return;
         }
-        fetch(`http://localhost:8000/posts/${id}`, {
+        fetch(`${BASE_URL}/posts/${id}`, {
           method: "DELETE",
         })
           .then((response) => response.json())
@@ -357,7 +359,7 @@
           if (image) {
             formData.append("image", image);
           }
-          fetch(`http://localhost:8000/posts/${id}/`, {
+          fetch(`${BASE_URL}/posts/${id}/`, {
             method: "PATCH",
             body: formData,
           })
@@ -374,7 +376,7 @@
         } else {
           // Thêm blog mới
           formData.append("image", image);
-          fetch("http://localhost:8000/posts/", {
+          fetch(`${BASE_URL}/posts/`, {
             method: "POST",
             body: formData,
           })
@@ -389,7 +391,7 @@
 
       function fetchProfile() {
         const userId = localStorage.getItem("userId");
-        fetch(`http://localhost:8000/users/${userId}/`)
+        fetch(`${BASE_URL}/users/${userId}/`)
           .then((response) => response.json())
           .then((data) => {
             document.getElementById("profile-username").value = data.username;
@@ -403,7 +405,7 @@
         const password = document.getElementById("profile-password").value;
         const userId = localStorage.getItem("userId");
 
-        fetch(`http://localhost:8000/users/${userId}/`, {
+        fetch(`${BASE_URL}/users/${userId}/`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
