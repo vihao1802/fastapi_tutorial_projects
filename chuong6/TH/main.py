@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import create_db_and_tables
 from contextlib import asynccontextmanager
 from routers import posts, users
+from fastapi.staticfiles import StaticFiles
 
 
 @asynccontextmanager
@@ -16,7 +17,7 @@ app = FastAPI(lifespan=lifespan)
 # Cấu hình CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],  # Cho phép frontend truy cập
+    allow_origins=["*"],  # Cho phép frontend truy cập
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

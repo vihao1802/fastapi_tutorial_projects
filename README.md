@@ -11,5 +11,5 @@
 | 7      | Bigger Applications và Multiple Files      | Ứng dụng xử lý tích hợp cổng thanh toán ZaloPay              |
 | 8      | Xác thực và Phân quyền (JWT)               | Ứng dụng Đăng nhập/Đăng ký với JWT                           |
 | 9      | Middleware và CORS                         | Ứng dụng tạo mã QR code                                      |
-| 10     | Testing và Debugging                       | Ứng dụng Chat App real-time với WebSocket                    |
+| 10     | Testing và Debugging                       | Ứng dụng quản lý sinh viên                                   |
 | 11     | Triển khai                                 | Triển khai ứng dụng quản lý Blog trên Render                 |
