@@ -26,11 +26,9 @@ app.add_middleware(
 app.include_router(posts.router)
 app.include_router(users.router)
 
-app.mount("/tmp", StaticFiles(directory="/tmp"), name="tmp")
-
-
 if __name__ == "__main__":
     import uvicorn
     import os
+
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
