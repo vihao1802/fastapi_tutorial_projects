@@ -10,10 +10,6 @@ def read_root():
 def create_item(item: dict):
     return {"message": "Item created", "item": item}
 
-@app.get("/items/{item_id}")
-def read_item(item_id):
-    return {"item_id": item_id}
-
 @app.get("/items/")
 async def read_item(skip: int=10,limit: int=20):
     return {"skip": skip, "limit": limit}
@@ -28,7 +24,6 @@ async def read_item(item_id: str, q: str | None = None, short: bool = False):
             {"description": "This is an amazing item that has a long description"}
         )
     return item
-
 
 @app.get("/users/{user_id}/items/{item_id}")
 def read_user_item(
