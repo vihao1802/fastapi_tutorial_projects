@@ -5,6 +5,7 @@ import qrcode
 import io
 import time
 import re
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -20,9 +21,12 @@ app.add_middleware(
 # Biến lưu thời gian truy cập theo IP để chống spam
 request_times = {}
 
+class RequestBody(BaseModel):
+    url: str
+    
 # 2. Middleware chống spam và kiểm tra URL hợp lệ
 @app.middleware("http")
-async def validate_url_and_prevent_spam(request: Request, call_next):
+async def validate_url_and_prevent_spam(request: RequestBody, call_next):
     if request.method == "OPTIONS":
         # Cho phép preflight request đi qua
         return await call_next(request)
@@ -55,11 +59,8 @@ async def validate_url_and_prevent_spam(request: Request, call_next):
 
 # 3. Endpoint generate QR
 @app.post("/generate_qr")
-async def generate_qr(request: Request):
-    data = await request.json()
-    url = data.get("url")
-
-    img = qrcode.make(url)
+async def generate_qr(request: RequestBody):
+    img = qrcode.make(request.url)
     buf = io.BytesIO()
     img.save(buf, format="PNG")
     buf.seek(0)
