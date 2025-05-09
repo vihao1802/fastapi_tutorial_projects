@@ -76,7 +76,7 @@
                 if (data.status_code === 200) {
                     alert(data.detail);
                     localStorage.setItem("userId", data.user.id);
-                    window.location.href = "home.html";
+                    window.location.href = "/home";
                 } else {
                     alert("Đăng nhập thất bại!");
                 }
