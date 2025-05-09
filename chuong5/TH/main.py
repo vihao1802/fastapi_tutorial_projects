@@ -3,7 +3,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi.exceptions import RequestValidationError
@@ -116,3 +116,8 @@ async def get_images():
         return images
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch images: {str(e)}")
+
+
+@app.get("/home")
+def read_index():
+    return FileResponse("index.html")

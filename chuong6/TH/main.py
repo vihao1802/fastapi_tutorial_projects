@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from database import create_db_and_tables
 from contextlib import asynccontextmanager
 from routers import posts, users
@@ -25,6 +26,20 @@ app.add_middleware(
 
 app.include_router(posts.router)
 app.include_router(users.router)
+
+# Mount thư mục static
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/login")
+def read_index():
+    return FileResponse("static/auth.html")
+
+
+@app.get("/home")
+def read_index():
+    return FileResponse("static/home.html")
+
 
 if __name__ == "__main__":
     import uvicorn

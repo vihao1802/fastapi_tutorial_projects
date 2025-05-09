@@ -27,7 +27,7 @@
             >Thông tin cá nhân</a
           > -->
           <a
-            href="auth.html"
+            href="/login"
             class="btn btn-outline-light"
             onclick="localStorage.removeItem('userId')"
             >Đăng xuất</a
@@ -123,12 +123,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="blogModalLabel">Thêm bài viết</h5>
-            <button
+            <!-- <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-            ></button>
+            ></button> -->
           </div>
           <div class="modal-body">
             <input type="hidden" id="blog-id" />
@@ -157,13 +157,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Đóng
-            </button>
+            <div></div>
             <button type="button" class="btn btn-primary" onclick="saveBlog()">
               Lưu
             </button>
@@ -173,8 +167,8 @@
     </div>
 
     <script>
-      const BASE_URL = "https://fastapi-blog-demo.onrender.com"; // Địa chỉ API của bạn
-      // const BASE_URL = "http://localhost:8000"; // Địa chỉ API của bạn
+      // const BASE_URL = "https://fastapi-blog-demo.onrender.com"; // Địa chỉ API của bạn
+      const BASE_URL = "http://localhost:8000"; // Địa chỉ API của bạn
       function formatDate(date) {
         const options = {
           year: "numeric",
@@ -199,7 +193,7 @@
 
       fetchMyBlogs();
 
-      fetchProfile();
+      // fetchProfile();
 
       // Gọi hàm khi trang tải xong
       document.addEventListener("DOMContentLoaded", fetchBlogs);
@@ -220,7 +214,7 @@
               html += `
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="${BASE_URL}${
+                                <img src="${
                                   post.image || "placeholder.jpg"
                                 }" class="card-img-top" alt="${post.title}">
                                 <div class="card-body">
@@ -259,7 +253,7 @@
                           <tr>
                               <td>${index + 1}</td>
                               <td>${post.title}</td>
-                              <td><img src="${BASE_URL}${
+                              <td><img src="${
                                 post.image || "placeholder.jpg"
                               }" alt="${
                 post.title
