@@ -12,4 +12,4 @@
 | 8      | Xác thực và Phân quyền (JWT)               | Ứng dụng Đăng nhập/Đăng ký với JWT                           |
 | 9      | Middleware và CORS                         | Ứng dụng tạo mã QR code                                      |
 | 10     | Testing và Debugging                       | Ứng dụng quản lý sinh viên                                   |
-| 11     | Triển khai                                 | Triển khai ứng dụng quản lý Blog trên Render                 |
+| 11     | Triển khai                                 | Triển khai ứng dụng quản lý Blog(Chương 6) trên Render       |

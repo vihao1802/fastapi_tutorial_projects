@@ -16,7 +16,7 @@ router = APIRouter(
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-UPLOAD_DIR = "static/uploads"  # Thư mục lưu trữ ảnh
+UPLOAD_DIR = "static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)  # Tạo thư mục nếu chưa có
 
 
