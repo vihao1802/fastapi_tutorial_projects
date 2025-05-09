@@ -173,8 +173,8 @@
     </div>
 
     <script>
-      const BASE_URL = "https://fastapi-blog-demo.onrender.com"; // Địa chỉ API của bạn
-      // const BASE_URL = "http://localhost:8000"; // Địa chỉ API của bạn
+      // const BASE_URL = "https://fastapi-blog-demo.onrender.com"; // Địa chỉ API của bạn
+      const BASE_URL = "http://localhost:8000"; // Địa chỉ API của bạn
       function formatDate(date) {
         const options = {
           year: "numeric",
@@ -220,7 +220,7 @@
               html += `
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="${BASE_URL}${
+                                <img src="${
                                   post.image || "placeholder.jpg"
                                 }" class="card-img-top" alt="${post.title}">
                                 <div class="card-body">
