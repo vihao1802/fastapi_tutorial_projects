@@ -26,36 +26,39 @@ class RequestBody(BaseModel):
     
 # 2. Middleware chống spam và kiểm tra URL hợp lệ
 @app.middleware("http")
-async def validate_url_and_prevent_spam(request: RequestBody, call_next):
+async def validate_url_and_prevent_spam(request: Request, call_next):
     if request.method == "OPTIONS":
-        # Cho phép preflight request đi qua
+        # Cho phép preflight request đi qua (CORS)
         return await call_next(request)
 
     if request.url.path == "/generate_qr":
         try:
             body = await request.json()
         except Exception:
-            return JSONResponse(status_code=400, content={"error": "Invalid request body"})
+            return JSONResponse(status_code=400, content={"error": "Invalid JSON body"})
 
         url = body.get("url", "")
         ip = request.client.host
 
         # Regex kiểm tra URL hợp lệ
-        url_pattern = re.compile(r'https?://\S+\.\S+')
+        url_pattern = re.compile(r'^https?://[\w\-\.]+\.[a-z]{2,}(/\S*)?$')
         if not url_pattern.match(url):
-            return JSONResponse(status_code=400, content={"error": "Invalid URL"})
+            return JSONResponse(status_code=400, content={"error": "Invalid URL format"})
 
-        # Chống spam theo IP trong 10s
+        # Chống spam theo IP trong 10 giây
         now = time.time()
         if ip not in request_times:
             request_times[ip] = []
+        # Lọc chỉ giữ lại các request trong 10 giây gần nhất
         request_times[ip] = [t for t in request_times[ip] if now - t < 10]
         request_times[ip].append(now)
 
         if len(request_times[ip]) > 3:
             return JSONResponse(status_code=429, content={"error": "Too many requests. Please wait."})
 
+    # Nếu mọi thứ ổn, tiếp tục xử lý request
     return await call_next(request)
+
 
 # 3. Endpoint generate QR
 @app.post("/generate_qr")
