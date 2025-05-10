@@ -6,7 +6,7 @@
 | 2      | Làm quen với FastAPI và cài đặt môi trường | Ứng dụng Hello World                                         |
 | 3      | Routes và Path Parameters                  | Ứng dụng quản lý Sách (Không có database)                    |
 | 4      | Request Body và Pydantic Models            | Ứng dụng chấm chữa writing với AI model (Google Gemini)      |
-| 5      | Response Model và Handling Errors          | Ứng dụng Upload file, ảnh với Cloudinary                     |
+| 5      | Response Model và Handling Errors          | Ứng dụng Upload ảnh với Cloudinary                     |
 | 6      | Tích hợp với Cơ sở dữ liệu                 | Ứng dụng Blog với SQLite                                     |
 | 7      | Bigger Applications và Multiple Files      | Ứng dụng xử lý tích hợp cổng thanh toán ZaloPay              |
 | 8      | Xác thực và Phân quyền (JWT)               | Ứng dụng Đăng nhập/Đăng ký với JWT                           |
