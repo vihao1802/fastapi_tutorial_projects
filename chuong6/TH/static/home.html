@@ -362,6 +362,7 @@
               if (data.status_code === 200) {
                 alert(data.detail);
                 fetchMyBlogs(); // Cập nhật danh sách blog
+                fetchBlogs();
               }
             })
             .catch((error) =>
@@ -379,6 +380,7 @@
               if(data.status_code === 201) {
                 alert(data.detail);
                 fetchMyBlogs(); // Cập nhật danh sách blog
+                fetchBlogs();
               } else alert("Thêm thất bại")
             })
             .catch((error) => console.error("Lỗi:", error));
