@@ -63,14 +63,20 @@ async def invalid_file_format_handler(
 # Upload file
 @app.post("/upload", response_model=UploadResponse)
 async def upload_file(file: UploadFile = File(...)):
-    allowed_formats = {"png", "jpg", "jpeg", "gif"}
+    allowed_formats = {"png", "jpg", "jpeg", "gif", "mp4", "mp3"}
     file_extension = file.filename.split(".")[-1]
 
     if file_extension not in allowed_formats:
         raise InvalidFileFormatException(file_format=file_extension)
     try:
+        resource_type = (
+            "video" if file_extension == "mp4" or file_extension == "mp3" else "image"
+        )
+
         response = cloudinary.uploader.upload(
-            file.file, folder=os.getenv("CLOUDINARY_FOLDER")
+            file.file,
+            folder=os.getenv("CLOUDINARY_FOLDER"),
+            resource_type=resource_type,
         )
         upload_response = {
             "public_id": response["public_id"],
