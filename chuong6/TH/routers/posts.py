@@ -106,7 +106,7 @@ def get_posts_by_user(
         query = query.where(Post.content.contains(content))
     if created_at:
         try:
-            created_date = datetime.strptime(created_at, "%Y-%m-%d").date()
+            created_date = datetime.datetime.strptime(created_at, "%Y-%m-%d").date()
             query = query.where(func.date(Post.created_at) == created_date)
         except ValueError:
             raise HTTPException(
